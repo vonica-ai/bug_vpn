@@ -4,7 +4,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_v2ray/flutter_v2ray.dart';
+import 'package:flutter_v2ray_client/flutter_v2ray.dart';
 import 'package:uicons/uicons.dart';
 
 import '../../../../shared/extension/v2ray_extensions.dart';
@@ -61,7 +61,7 @@ class _ConnectionButtonState extends ConsumerState<ConnectionButton> with Ticker
                 return Card(
                   elevation: 0,
                   margin: const EdgeInsets.all(0),
-                  color: Color.lerp(AppColors.amber, AppColors.green, t)?.withOpacity(0.3),
+                  color: Color.lerp(AppColors.amber, AppColors.green, t)?.withAlpha(100),
                   // color: Colors.transparent,
                   clipBehavior: Clip.antiAlias,
                   shape: const StadiumBorder(),
@@ -80,27 +80,7 @@ class _ConnectionButtonState extends ConsumerState<ConnectionButton> with Ticker
                       child: Stack(
                         children: [
                           //
-                          Positioned.fill(
-                            child: Card(
-                              elevation: 0,
-                              shape: const StadiumBorder(),
-                              margin: const EdgeInsets.all(24),
-                              color: Color.lerp(AppColors.amber, AppColors.green, t),
-                              child: SizedBox.expand(
-                                child: Icon(
-                                  UIcons.solidRounded.bug,
-                                  size: h * 0.35,
-                                  color: Colors.white,
-                                  shadows: const [
-                                    Shadow(
-                                      blurRadius: 4,
-                                      color: Colors.black12,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
+
                           //
                           Positioned.fill(
                             child: Padding(
@@ -133,11 +113,34 @@ class _ConnectionButtonState extends ConsumerState<ConnectionButton> with Ticker
                                 ],
                                 child: CustomPaint(
                                   painter: _ArcPainter(
-                                    color: Color.lerp(AppColors.amber, AppColors.green, t)!.withOpacity(0.5),
+                                    color: Color.lerp(AppColors.amber, AppColors.green, t)!
+                                        .withAlpha(150),
                                     arcCount: 9,
                                     reverse: true,
                                     strokeWidth: 4,
                                   ),
+                                ),
+                              ),
+                            ),
+                          ),
+
+                          Positioned.fill(
+                            child: Card(
+                              elevation: 0,
+                              shape: const StadiumBorder(),
+                              margin: const EdgeInsets.all(24),
+                              color: Color.lerp(AppColors.amber, AppColors.green, t),
+                              child: SizedBox.expand(
+                                child: Icon(
+                                  UIcons.solidRounded.bug,
+                                  size: h * 0.35,
+                                  color: Colors.white,
+                                  shadows: const [
+                                    Shadow(
+                                      blurRadius: 4,
+                                      color: Colors.black12,
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
@@ -155,7 +158,7 @@ class _ConnectionButtonState extends ConsumerState<ConnectionButton> with Ticker
     );
   }
 
-  Future<void> _handleOnTap(V2RayStatus status, FlutterV2ray v2ray, ConfigModel? selectedConfig) async {
+  Future<void> _handleOnTap(V2RayStatus status, V2ray v2ray, ConfigModel? selectedConfig) async {
     if (status.isConnected) {
       animationController.repeat();
       // animationController2.repeat(reverse: true);
@@ -169,12 +172,14 @@ class _ConnectionButtonState extends ConsumerState<ConnectionButton> with Ticker
           try {
             animationController.repeat();
 
-            final ping = await v2ray.getDelayWithTimeout(selectedConfig.v2rayURL.getFullConfiguration());
+            final ping =
+                await v2ray.getDelayWithTimeout(selectedConfig.v2rayURL.getFullConfiguration());
             await Future.delayed(const Duration(seconds: 1));
             if (ping > 0) {
               await v2ray.startV2Ray(
                 remark: '${AppUtils.appLabel} is Running...',
                 bypassSubnets: AppUtils.subnets,
+                // proxyOnly: true,
                 config: selectedConfig.v2rayURL.getFullConfiguration(),
               );
               ref.read(selectedConfigPingProvider.notifier).update((state) => ping);
@@ -210,8 +215,8 @@ class _ArcPainter extends CustomPainter {
     final p = Paint()
       ..color = color
       ..strokeWidth = strokeWidth
-      ..strokeCap = StrokeCap.round
-      ..style = PaintingStyle.stroke;
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round;
     final h = size.height;
     final w = size.width;
 

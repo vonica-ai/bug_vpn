@@ -21,7 +21,7 @@ class AppTheme {
         ),
       ),
     ),
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       elevation: 0,
       margin: const EdgeInsets.all(0),
       color: Colors.white,
@@ -32,7 +32,9 @@ class AppTheme {
     ),
     pageTransitionsTheme: PageTransitionsTheme(
       builders: {
-        for (final platform in TargetPlatform.values) ...{platform: const FadeUpwardsPageTransitionsBuilder()},
+        for (final platform in TargetPlatform.values) ...{
+          platform: const FadeUpwardsPageTransitionsBuilder()
+        },
       },
     ),
   );

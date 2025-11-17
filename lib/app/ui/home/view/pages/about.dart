@@ -25,7 +25,10 @@ class AboutPage extends ConsumerWidget {
                 actions: [
                   IconButton(
                     onPressed: () => Navigator.pop(context),
-                    icon: Icon(UIcons.regularRounded.x),
+                    icon: Icon(
+                      UIcons.regularRounded.x,
+                      size: 16,
+                    ),
                   ),
                   const SizedBox(width: 8),
                 ],

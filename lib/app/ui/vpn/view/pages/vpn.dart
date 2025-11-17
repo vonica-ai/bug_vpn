@@ -62,7 +62,7 @@ class VpnPage extends ConsumerWidget {
                 gradient: LinearGradient(
                   colors: [
                     Colors.white,
-                    Colors.white.withOpacity(0),
+                    Colors.white.withAlpha(0),
                   ],
                   stops: const [0.1, 0.4],
                   begin: Alignment.topCenter,

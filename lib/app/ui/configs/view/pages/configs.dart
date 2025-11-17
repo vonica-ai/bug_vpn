@@ -4,7 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_v2ray/flutter_v2ray.dart';
+import 'package:flutter_v2ray_client/flutter_v2ray.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:uicons/uicons.dart';
 
@@ -128,13 +128,14 @@ class ConfigsPage extends ConsumerWidget {
             ),
           );
         },
-        error: (error, stackTrace) => ConfigErrorWidget(onError: () => ref.invalidate(configsProvider)),
+        error: (error, stackTrace) =>
+            ConfigErrorWidget(onError: () => ref.invalidate(configsProvider)),
         loading: () => const LoadingWidget(),
       ),
     );
   }
 
-  Future<void> _getPing(BuildContext context, FlutterV2ray v2ray, V2RayURL config, WidgetRef ref) async {
+  Future<void> _getPing(BuildContext context, V2ray v2ray, V2RayURL config, WidgetRef ref) async {
     context.loaderOverlay.show();
     try {
       final ping = await v2ray.getDelayWithTimeout(config.getFullConfiguration());
@@ -192,7 +193,7 @@ class ConfigCard extends StatelessWidget {
           backgroundColor: isSelected ? Theme.of(context).primaryColor : AppColors.red,
           child: Text('${index + 1}'),
         ),
-        title: Text('${type.toUpperCase()} ${index + 1}', maxLines: 1, overflow: TextOverflow.ellipsis),
+        title: Text(config.remark, maxLines: 1, overflow: TextOverflow.ellipsis),
         subtitle: Text('Network : ${config.network.toUpperCase()}'),
         titleTextStyle: Theme.of(context).textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.bold,

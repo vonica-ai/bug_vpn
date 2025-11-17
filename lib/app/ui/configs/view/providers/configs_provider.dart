@@ -1,7 +1,7 @@
-import '../../data/models/config_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_v2ray/flutter_v2ray.dart';
+import 'package:flutter_v2ray_client/url/url.dart';
 
+import '../../data/models/config_model.dart';
 import '../../data/repository/configs_repository.dart';
 import '../../data/source/remote/remote_data_source.dart';
 

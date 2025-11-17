@@ -8,7 +8,8 @@ class AppUtils {
 
   static const String appLabel = 'BUG VPN';
 
-  static const String sublinksUrl = 'https://raw.githubusercontent.com/Kwinshadow/TelegramV2rayCollector/main/sublinks/mix.txt';
+  static const String sublinksUrl =
+      'https://raw.githubusercontent.com/SoliSpirit/v2ray-configs/refs/heads/main/Subscriptions/Sub2.txt';
 
   static const List<String> subnets = [
     "0.0.0.0/5",
