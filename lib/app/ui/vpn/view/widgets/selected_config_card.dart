@@ -6,7 +6,7 @@ import 'package:loader_overlay/loader_overlay.dart';
 import 'package:uicons/uicons.dart';
 
 import '../../../../shared/extension/v2ray_extensions.dart';
-import '../../../configs/data/models/config_model.dart';
+import '../../../configs/view/providers/configs_provider.dart';
 import '../../../home/view/providers/bottom_nav_index_provider.dart';
 import '../providers/v2ray_provider.dart';
 import 'config_delay.dart';
@@ -14,15 +14,13 @@ import 'config_delay.dart';
 class SelectedConfigCard extends ConsumerWidget {
   const SelectedConfigCard({
     super.key,
-    required this.selectedConfig,
   });
-
-  final ConfigModel? selectedConfig;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final v2ray = ref.read(v2rayProvider);
-    final status = ref.read(v2RayStatusProvider);
+    final status = ref.watch(v2RayStatusProvider);
+    final selectedConfig = ref.watch(selectedConfigProvider);
     Widget? child;
     if (selectedConfig == null) {
       child = OutlinedButton.icon(
@@ -56,7 +54,7 @@ class SelectedConfigCard extends ConsumerWidget {
             ),
           ),
           title: Text(
-            selectedConfig!.name,
+            selectedConfig.name,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -64,7 +62,7 @@ class SelectedConfigCard extends ConsumerWidget {
                 fontWeight: FontWeight.bold,
               ),
           subtitle: Text(
-            'Network : ${selectedConfig!.v2rayURL.network.toUpperCase()}',
+            'Network : ${selectedConfig.v2rayURL.network.toUpperCase()}',
           ),
           contentPadding: const EdgeInsets.only(left: 16, right: 8),
           trailing: Row(
@@ -78,7 +76,8 @@ class SelectedConfigCard extends ConsumerWidget {
                   if (status.isConnected) return;
                   context.loaderOverlay.show();
                   try {
-                    final delay = await v2ray.getDelayWithTimeout(selectedConfig!.v2rayURL.getFullConfiguration());
+                    final delay = await v2ray
+                        .getDelayWithTimeout(selectedConfig.v2rayURL.getFullConfiguration());
                     ref.read(selectedConfigPingProvider.notifier).update(
                           (state) => delay,
                         );

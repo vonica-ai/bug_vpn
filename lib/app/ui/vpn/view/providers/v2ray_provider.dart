@@ -8,6 +8,7 @@ final v2RayStatusProvider = StateProvider<V2RayStatus>((ref) {
 final v2rayProvider = Provider<V2ray>((ref) {
   final v2ray = V2ray(
     onStatusChanged: (status) {
+      print(status.state);
       ref.read(v2RayStatusProvider.notifier).update(
             (state) => V2RayStatus(
               download: status.download,

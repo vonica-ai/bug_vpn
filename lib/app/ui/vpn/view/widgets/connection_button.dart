@@ -29,7 +29,7 @@ class _ConnectionButtonState extends ConsumerState<ConnectionButton> with Ticker
     super.initState();
     animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 700),
+      duration: const Duration(seconds: 2),
     );
 
     animationController.reverse();
@@ -58,28 +58,35 @@ class _ConnectionButtonState extends ConsumerState<ConnectionButton> with Ticker
               tween: Tween(end: status.isConnected ? 1 : 0),
               duration: const Duration(milliseconds: 300),
               builder: (context, t, child) {
-                return Card(
-                  elevation: 0,
-                  margin: const EdgeInsets.all(0),
-                  color: Color.lerp(AppColors.amber, AppColors.green, t)?.withAlpha(100),
-                  // color: Colors.transparent,
-                  clipBehavior: Clip.antiAlias,
-                  shape: const StadiumBorder(),
+                return ClipRRect(
+                  borderRadius: BorderRadius.circular(100),
                   child: InkWell(
+                    borderRadius: BorderRadius.circular(100),
                     onTap: () async {
                       if (animationController.isAnimating) return;
-
-                      // animationController.repeat();
-
-                      // await Future.delayed(const Duration(seconds: 1));
-                      // animationController.reverse();
-
                       _handleOnTap(status, v2ray, selectedConfig);
                     },
                     child: Center(
                       child: Stack(
+                        clipBehavior: Clip.none,
                         children: [
-                          //
+                          Positioned.fill(
+                              child: Animate(
+                            controller: animationController,
+                            autoPlay: false,
+                            effects: const [
+                              ScaleEffect(begin: Offset(1, 1), end: Offset(0.8, 0.8)),
+                            ],
+                            child: Card(
+                              elevation: 24,
+                              margin: const EdgeInsets.all(0),
+                              color: Color.lerp(AppColors.amber, AppColors.green, t)?.withAlpha(50),
+                              shadowColor:
+                                  Color.lerp(AppColors.amber, AppColors.green, t)?.withAlpha(50),
+                              clipBehavior: Clip.antiAlias,
+                              shape: const StadiumBorder(),
+                            ),
+                          )),
 
                           //
                           Positioned.fill(
@@ -89,13 +96,13 @@ class _ConnectionButtonState extends ConsumerState<ConnectionButton> with Ticker
                                 controller: animationController,
                                 autoPlay: false,
                                 effects: const [
-                                  RotateEffect(begin: 0, end: 1, curve: Curves.linear),
+                                  ScaleEffect(begin: Offset(1, 1), end: Offset(0.5, 0.5)),
                                 ],
                                 child: CustomPaint(
                                   painter: _ArcPainter(
                                     color: Color.lerp(AppColors.amber, AppColors.green, t)!,
                                     arcCount: 3,
-                                    strokeWidth: 16,
+                                    strokeWidth: 4,
                                   ),
                                 ),
                               ),
@@ -106,34 +113,34 @@ class _ConnectionButtonState extends ConsumerState<ConnectionButton> with Ticker
                             child: Padding(
                               padding: const EdgeInsets.all(2),
                               child: Animate(
-                                // controller: animationController,
                                 autoPlay: false,
+                                controller: animationController,
                                 effects: const [
-                                  RotateEffect(begin: 0, end: 1, curve: Curves.linear),
+                                  ScaleEffect(begin: Offset(1, 1), end: Offset(0, 0)),
                                 ],
                                 child: CustomPaint(
                                   painter: _ArcPainter(
-                                    color: Color.lerp(AppColors.amber, AppColors.green, t)!
-                                        .withAlpha(150),
-                                    arcCount: 9,
+                                    color: Color.lerp(AppColors.amber, AppColors.green, t)!,
+                                    arcCount: 3,
                                     reverse: true,
-                                    strokeWidth: 4,
+                                    strokeWidth: 20,
                                   ),
                                 ),
                               ),
                             ),
                           ),
 
+                          //
                           Positioned.fill(
                             child: Card(
                               elevation: 0,
                               shape: const StadiumBorder(),
-                              margin: const EdgeInsets.all(24),
+                              margin: const EdgeInsets.all(32),
                               color: Color.lerp(AppColors.amber, AppColors.green, t),
                               child: SizedBox.expand(
                                 child: Icon(
                                   UIcons.solidRounded.bug,
-                                  size: h * 0.35,
+                                  size: h * 0.3,
                                   color: Colors.white,
                                   shadows: const [
                                     Shadow(
@@ -161,7 +168,7 @@ class _ConnectionButtonState extends ConsumerState<ConnectionButton> with Ticker
   Future<void> _handleOnTap(V2RayStatus status, V2ray v2ray, ConfigModel? selectedConfig) async {
     if (status.isConnected) {
       animationController.repeat();
-      // animationController2.repeat(reverse: true);
+
       await Future.delayed(const Duration(seconds: 1));
       await v2ray.stopV2Ray();
       ref.read(selectedConfigPingProvider.notifier).update((state) => null);
