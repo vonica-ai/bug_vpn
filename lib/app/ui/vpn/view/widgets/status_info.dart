@@ -31,26 +31,21 @@ class _StatusInfoState extends ConsumerState<StatusInfo> with SingleTickerProvid
   @override
   Widget build(BuildContext context) {
     final status = ref.watch(v2RayStatusProvider);
-    ref.listen(
-      v2RayStatusProvider,
-      (previous, next) {
-        if (previous != next) {
-          if (next.isConnected) {
-            _animationController.forward();
-          } else {
-            _animationController.reverse();
-          }
+    ref.listen(v2RayStatusProvider, (previous, next) {
+      if (previous != next) {
+        if (next.isConnected) {
+          _animationController.forward();
+        } else {
+          _animationController.reverse();
         }
-      },
-    );
+      }
+    });
     return Animate(
       autoPlay: false,
       controller: _animationController,
       effects: const [
         FadeEffect(),
-        SlideEffect(
-          begin: Offset(0, -0.1),
-        ),
+        SlideEffect(begin: Offset(0, -0.1)),
       ],
       child: Column(
         children: [

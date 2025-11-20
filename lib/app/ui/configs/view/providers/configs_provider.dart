@@ -9,6 +9,15 @@ final configsProvider = FutureProvider<Iterable<V2RayURL>>((ref) async {
   return ConfigsRepository(RemoteDataSource()).getConfigs();
 });
 
-final selectedConfigProvider = StateProvider<ConfigModel?>((ref) {
-  return null;
-});
+final selectedConfigProvider = NotifierProvider<SelectedConfigNotifier, ConfigModel?>(
+  SelectedConfigNotifier.new,
+);
+
+class SelectedConfigNotifier extends Notifier<ConfigModel?> {
+  @override
+  ConfigModel? build() => null;
+
+  update(ConfigModel? config) {
+    state = config;
+  }
+}

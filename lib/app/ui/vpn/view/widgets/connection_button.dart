@@ -27,10 +27,7 @@ class _ConnectionButtonState extends ConsumerState<ConnectionButton> with Ticker
   @override
   void initState() {
     super.initState();
-    animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 2),
-    );
+    animationController = AnimationController(vsync: this, duration: const Duration(seconds: 2));
 
     animationController.reverse();
   }
@@ -71,22 +68,30 @@ class _ConnectionButtonState extends ConsumerState<ConnectionButton> with Ticker
                         clipBehavior: Clip.none,
                         children: [
                           Positioned.fill(
-                              child: Animate(
-                            controller: animationController,
-                            autoPlay: false,
-                            effects: const [
-                              ScaleEffect(begin: Offset(1, 1), end: Offset(0.8, 0.8)),
-                            ],
-                            child: Card(
-                              elevation: 24,
-                              margin: const EdgeInsets.all(0),
-                              color: Color.lerp(AppColors.amber, AppColors.green, t)?.withAlpha(50),
-                              shadowColor:
-                                  Color.lerp(AppColors.amber, AppColors.green, t)?.withAlpha(50),
-                              clipBehavior: Clip.antiAlias,
-                              shape: const StadiumBorder(),
+                            child: Animate(
+                              controller: animationController,
+                              autoPlay: false,
+                              effects: const [
+                                ScaleEffect(begin: Offset(1, 1), end: Offset(0.8, 0.8)),
+                              ],
+                              child: Card(
+                                elevation: 24,
+                                margin: const EdgeInsets.all(0),
+                                color: Color.lerp(
+                                  AppColors.amber,
+                                  AppColors.green,
+                                  t,
+                                )?.withAlpha(50),
+                                shadowColor: Color.lerp(
+                                  AppColors.amber,
+                                  AppColors.green,
+                                  t,
+                                )?.withAlpha(50),
+                                clipBehavior: Clip.antiAlias,
+                                shape: const StadiumBorder(),
+                              ),
                             ),
-                          )),
+                          ),
 
                           //
                           Positioned.fill(
@@ -142,12 +147,7 @@ class _ConnectionButtonState extends ConsumerState<ConnectionButton> with Ticker
                                   UIcons.solidRounded.bug,
                                   size: h * 0.3,
                                   color: Colors.white,
-                                  shadows: const [
-                                    Shadow(
-                                      blurRadius: 4,
-                                      color: Colors.black12,
-                                    ),
-                                  ],
+                                  shadows: const [Shadow(blurRadius: 4, color: Colors.black12)],
                                 ),
                               ),
                             ),
@@ -171,7 +171,7 @@ class _ConnectionButtonState extends ConsumerState<ConnectionButton> with Ticker
 
       await Future.delayed(const Duration(seconds: 1));
       await v2ray.stopV2Ray();
-      ref.read(selectedConfigPingProvider.notifier).update((state) => null);
+      ref.read(selectedConfigPingProvider.notifier).update((_) => null);
       animationController.reverse();
     } else {
       if (selectedConfig is ConfigModel) {
@@ -179,17 +179,18 @@ class _ConnectionButtonState extends ConsumerState<ConnectionButton> with Ticker
           try {
             animationController.repeat();
 
-            final ping =
-                await v2ray.getDelayWithTimeout(selectedConfig.v2rayURL.getFullConfiguration());
+            final delay = await v2ray.getDelayWithTimeout(
+              selectedConfig.v2rayURL.getFullConfiguration(),
+            );
             await Future.delayed(const Duration(seconds: 1));
-            if (ping > 0) {
+            if (delay > 0) {
               await v2ray.startV2Ray(
                 remark: '${AppUtils.appLabel} is Running...',
                 bypassSubnets: AppUtils.subnets,
                 // proxyOnly: true,
                 config: selectedConfig.v2rayURL.getFullConfiguration(),
               );
-              ref.read(selectedConfigPingProvider.notifier).update((state) => ping);
+              ref.read(selectedConfigPingProvider.notifier).update((_) => delay);
             } else {
               AppUtils.configNotAvailableToast();
             }

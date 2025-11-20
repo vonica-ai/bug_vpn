@@ -14,10 +14,7 @@ class HomePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentIndex = ref.watch(bottomNavIndexProvider);
     return Scaffold(
-      body: LazyIndexedStack(
-        index: currentIndex,
-        children: const [VpnPage(), ConfigsPage()],
-      ),
+      body: LazyIndexedStack(index: currentIndex, children: const [VpnPage(), ConfigsPage()]),
       bottomNavigationBar: BottomAppBar(
         elevation: 8,
         padding: const EdgeInsets.all(0),
@@ -37,9 +34,7 @@ class HomePage extends ConsumerWidget {
           showSelectedLabels: false,
           showUnselectedLabels: false,
           currentIndex: currentIndex,
-          onTap: (index) => ref.read(bottomNavIndexProvider.notifier).update(
-                (state) => index,
-              ),
+          onTap: (index) => ref.read(bottomNavIndexProvider.notifier).update(index),
         ),
       ),
     );

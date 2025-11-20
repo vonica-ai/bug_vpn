@@ -11,12 +11,14 @@ import 'package:uicons/uicons.dart';
 import '../../../../shared/extension/extensions.dart';
 import '../../../../shared/extension/v2ray_extensions.dart';
 import '../../../../shared/preferences/preferences.dart';
-import '../../../../shared/theme/colors.dart';
 import '../../../../shared/utils/utils.dart';
 import '../../../vpn/view/providers/v2ray_provider.dart';
 import '../../data/models/config_model.dart';
 import '../providers/configs_provider.dart';
+import '../widgets/config_card.dart';
 import '../widgets/config_error_widget.dart';
+import '../widgets/loading_widget.dart';
+import '../widgets/tab_bar_card.dart';
 
 class ConfigsPage extends ConsumerWidget {
   const ConfigsPage({super.key});
@@ -55,25 +57,17 @@ class ConfigsPage extends ConsumerWidget {
                 Animate(
                   effects: const [
                     FadeEffect(),
-                    SlideEffect(
-                      begin: Offset(0, -0.1),
-                    ),
+                    SlideEffect(begin: Offset(0, -0.1)),
                   ],
                   child: Row(
-                    children: [
-                      Expanded(
-                        child: TabBarCard(types: types),
-                      ),
-                    ],
+                    children: [Expanded(child: TabBarCard(types: types))],
                   ),
                 ),
                 Expanded(
                   child: Animate(
                     effects: const [
                       FadeEffect(),
-                      SlideEffect(
-                        begin: Offset(0, 0.1),
-                      ),
+                      SlideEffect(begin: Offset(0, 0.1)),
                     ],
                     child: TabBarView(
                       children: [
@@ -91,16 +85,18 @@ class ConfigsPage extends ConsumerWidget {
                                 index: index,
                                 type: type,
                                 configsPing: configsPing,
-                                onPing: () => _getPing(context, v2ray, config, ref),
+                                onPing: () => _getDelay(context, v2ray, config, ref),
                                 onTap: () async {
                                   await v2ray.stopV2Ray();
                                   if (!context.mounted) return;
-                                  await _getPing(context, v2ray, config, ref);
-                                  ref.read(selectedConfigPingProvider.notifier).update(
-                                        (state) => configsPing[config.url],
-                                      );
-                                  ref.read(selectedConfigProvider.notifier).update(
-                                        (state) => ConfigModel(
+                                  await _getDelay(context, v2ray, config, ref);
+                                  ref
+                                      .read(selectedConfigPingProvider.notifier)
+                                      .update((_) => configsPing[config.url]);
+                                  ref
+                                      .read(selectedConfigProvider.notifier)
+                                      .update(
+                                        ConfigModel(
                                           ping: configsPing[config.url],
                                           name: '${type.toUpperCase()} ${index + 1}',
                                           type: type,
@@ -135,158 +131,23 @@ class ConfigsPage extends ConsumerWidget {
     );
   }
 
-  Future<void> _getPing(BuildContext context, V2ray v2ray, V2RayURL config, WidgetRef ref) async {
+  Future<void> _getDelay(BuildContext context, V2ray v2ray, V2RayURL config, WidgetRef ref) async {
     context.loaderOverlay.show();
     try {
       final ping = await v2ray.getDelayWithTimeout(config.getFullConfiguration());
 
-      ref.read(configsPingProvider.notifier).update(
-        (state) {
-          return {
-            ...state,
-            ...{config.url: ping},
-          };
-        },
-      );
+      ref
+          .read(configsPingProvider.notifier)
+          .update(
+            (state) => {
+              ...state,
+              ...{config.url: ping},
+            },
+          );
     } catch (e) {
       log(e.toString());
       AppUtils.configNotAvailableToast();
     }
     if (context.mounted) context.loaderOverlay.hide();
-  }
-}
-
-class ConfigCard extends StatelessWidget {
-  final V2RayURL config;
-  final bool isSelected;
-  final int index;
-  final String type;
-  final Map<String, int> configsPing;
-  final VoidCallback onPing;
-  final VoidCallback onTap;
-  const ConfigCard({
-    super.key,
-    required this.config,
-    required this.isSelected,
-    required this.index,
-    required this.type,
-    required this.configsPing,
-    required this.onPing,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 0,
-      clipBehavior: Clip.antiAlias,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side: BorderSide(
-          width: 2,
-          color: isSelected ? AppColors.green : Colors.grey.shade300,
-        ),
-      ),
-      margin: const EdgeInsets.all(0),
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: isSelected ? Theme.of(context).primaryColor : AppColors.red,
-          child: Text('${index + 1}'),
-        ),
-        title: Text(config.remark, maxLines: 1, overflow: TextOverflow.ellipsis),
-        subtitle: Text('Network : ${config.network.toUpperCase()}'),
-        titleTextStyle: Theme.of(context).textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
-        selected: isSelected,
-        contentPadding: const EdgeInsets.only(left: 16, right: 8),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (configsPing.containsKey(config.url) && configsPing[config.url]! > 0)
-              Text(
-                '${configsPing[config.url]} ms',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: AppUtils.pingColor(configsPing[config.url]!),
-                    ),
-              ),
-            const SizedBox(width: 8),
-            IconButton(
-              tooltip: 'Get config ping',
-              onPressed: onPing,
-              icon: Icon(UIcons.regularRounded.tachometer_fastest),
-            ),
-          ],
-        ),
-        onTap: onTap,
-      ),
-    );
-  }
-}
-
-class LoadingWidget extends StatelessWidget {
-  const LoadingWidget({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Animate(
-      effects: const [
-        FadeEffect(),
-        ScaleEffect(),
-      ],
-      child: const Center(
-        child: CircularProgressIndicator(
-          strokeWidth: 4,
-          backgroundColor: Colors.black12,
-          strokeAlign: BorderSide.strokeAlignOutside,
-          strokeCap: StrokeCap.round,
-        ),
-      ),
-    );
-  }
-}
-
-class TabBarCard extends StatelessWidget {
-  const TabBarCard({
-    super.key,
-    required this.types,
-  });
-
-  final List<String> types;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 0,
-      clipBehavior: Clip.antiAlias,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side: BorderSide(
-          width: 2,
-          color: Colors.grey.shade300,
-        ),
-      ),
-      margin: const EdgeInsets.all(16),
-      child: TabBar(
-        tabs: [
-          ...types.map((type) => Tab(text: type)),
-        ],
-        isScrollable: true,
-        tabAlignment: TabAlignment.start,
-        dividerHeight: 0,
-        padding: const EdgeInsets.all(8),
-        labelColor: Colors.white,
-        indicatorSize: TabBarIndicatorSize.tab,
-        labelPadding: const EdgeInsets.symmetric(horizontal: 16),
-        splashBorderRadius: BorderRadius.circular(12),
-        indicator: BoxDecoration(
-          color: Theme.of(context).primaryColor,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        labelStyle: Theme.of(context).textTheme.titleMedium,
-      ),
-    );
   }
 }

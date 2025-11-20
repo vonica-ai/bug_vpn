@@ -21,9 +21,7 @@ void main() async {
   runApp(
     ProviderScope(
       overrides: [
-        selectedConfigProvider.overrideWith(
-          (ref) => Preferences.instance.getConfig(),
-        ),
+        selectedConfigProvider.overrideWithBuild((ref, _) => Preferences.instance.getConfig()),
       ],
       child: const App(),
     ),
@@ -42,10 +40,7 @@ class App extends StatelessWidget {
         animationBuilder: (context, animation, alignment, child) {
           return ScaleTransition(
             scale: Tween<double>(begin: 0.5, end: 1).animate(animation),
-            child: FadeTransition(
-              opacity: animation,
-              child: child,
-            ),
+            child: FadeTransition(opacity: animation, child: child),
           );
         },
       ),
@@ -75,9 +70,7 @@ class App extends StatelessWidget {
           theme: AppTheme.theme,
           initialRoute: AppRoutes.splashRoute,
           routes: AppRoutes.routes,
-          scrollBehavior: const MaterialScrollBehavior().copyWith(
-            overscroll: false,
-          ),
+          scrollBehavior: const MaterialScrollBehavior().copyWith(overscroll: false),
         ),
       ),
     );
