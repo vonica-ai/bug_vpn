@@ -6,7 +6,7 @@ import '../theme/colors.dart';
 class AppUtils {
   AppUtils._();
 
-  static const String appLabel = 'BUG VPN';
+  static const String appLabel = 'Galaxy Tunnel';
 
   static const String sublinksUrl =
       'https://raw.githubusercontent.com/SoliSpirit/v2ray-configs/refs/heads/main/Subscriptions/Sub2.txt';
