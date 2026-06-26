@@ -3,24 +3,24 @@ import 'package:flutter/material.dart';
 class AppColors {
   AppColors._();
 
-  // Material 3 Purple (Reburn-GALAXY style)
-  static const Color primary = Color(0xFF6650A4);
-  static const Color primaryContainer = Color(0xFFE8DEF8);
-  static const Color secondary = Color(0xFF625B71);
-  static const Color secondaryContainer = Color(0xFFE0E0EC);
-  static const Color tertiary = Color(0xFF7D5260);
-  static const Color tertiaryContainer = Color(0xFFFFD8E4);
+  // Dark theme (default - Galaxy Tunnel style)
+  static const Color darkBackground = Color(0xFF14171B);
+  static const Color darkCard = Color(0xFF1A1D22);
+  static const Color darkBorder = Color(0x0AFFFFFF);
+  static const Color darkTextPrimary = Color(0xFFFFFFFF);
+  static const Color darkTextSecondary = Color(0xFFA3A39E);
 
-  // Surface & Background
-  static const Color surface = Color(0xFFFFFBFE);
-  static const Color background = Color(0xFFFFFBFE);
-  static const Color onSurface = Color(0xFF1C1B1F);
-  static const Color outline = Color(0xFF79747E);
+  // Light theme
+  static const Color lightBackground = Color(0xFFF9F9FB);
+  static const Color lightCard = Color(0xFFF0F1F5);
+  static const Color lightBorder = Color(0x11000000);
+  static const Color lightTextPrimary = Color(0xFF111111);
+  static const Color lightTextSecondary = Color(0xFF555555);
 
-  // Accents (from original bug_vpn)
-  static const Color green = Color(0xFF19aba1);
-  static const Color amber = Color(0xFFF4AC24);
-  static const Color blue = Color.fromARGB(255, 25, 52, 171);
-  static const Color red = Color.fromARGB(255, 110, 56, 56);
-  static const Color light = Color.fromARGB(255, 243, 244, 255);
+  // Accent colors
+  static const Color cyanAccent = Color(0xFF00E5FF);
+  static const Color greenOnline = Color(0xFF10B981);
+  static const Color blueUpload = Color(0xFF06B6D4);
+  static const Color redOffline = Color(0xFFDC2626);
+  static const Color orangeConnecting = Color(0xFFD97706);
 }
