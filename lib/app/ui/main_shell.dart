@@ -24,14 +24,12 @@ class _MainShellState extends ConsumerState<MainShell> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final bgColor = isDark ? AppColors.darkBackground : AppColors.lightBackground;
-    final cardColor = isDark ? AppColors.darkCard : AppColors.lightCard;
     final borderColor = isDark ? AppColors.darkBorder : AppColors.lightBorder;
-    final textPrimary = isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary;
     final language = ref.watch(languageProvider);
     return Scaffold(
       backgroundColor: bgColor,
-      appBar: AppBar(bottom: PreferredSize(preferredSize: const Size.fromHeight(1), child: Divider(color: borderColor, height: 1)), title: GalaxyTunnelBrandText(fontSize: 16, isDark: isDark), actions: [Row(children: [LanguageButton(label: 'MY', isActive: language == 'my', isDark: isDark, onTap: () => ref.read(languageProvider.notifier).state = 'my'), const SizedBox(width: 4), LanguageButton(label: 'EN', isActive: language == 'en', isDark: isDark, onTap: () => ref.read(languageProvider.notifier).state = 'en'), const SizedBox(width: 8)])]),
-      drawer: Drawer(child: Column(children: [Container(padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20), child: GalaxyTunnelBrandText(fontSize: 18, isDark: isDark)), Divider(color: borderColor), ])),
+      appBar: AppBar(backgroundColor: bgColor, surfaceTintColor: Colors.transparent, title: GalaxyTunnelBrandText(fontSize: 16, isDark: isDark), actions: [Row(children: [LanguageButton(label: 'MY', isActive: language == 'my', isDark: isDark, onTap: () => ref.read(languageProvider.notifier).state = 'my'), const SizedBox(width: 4), LanguageButton(label: 'EN', isActive: language == 'en', isDark: isDark, onTap: () => ref.read(languageProvider.notifier).state = 'en'), const SizedBox(width: 8)])]), bottom: PreferredSize(preferredSize: const Size.fromHeight(1), child: Divider(color: borderColor, height: 1))),
+      drawer: Drawer(backgroundColor: isDark ? AppColors.darkCard : AppColors.lightCard, child: SafeArea(child: Column(children: [Padding(padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20), child: GalaxyTunnelBrandText(fontSize: 18, isDark: isDark)), Divider(color: borderColor, height: 1), const SizedBox(height: 12), DrawerItem(label: 'Servers', icon: Icons.dns, isActive: _currentIndex == 0, isDark: isDark, onTap: () { setState(() => _currentIndex = 0); Navigator.pop(context); }), DrawerItem(label: 'Settings', icon: Icons.settings, isActive: _currentIndex == 1, isDark: isDark, onTap: () { setState(() => _currentIndex = 1); Navigator.pop(context); }), DrawerItem(label: 'Contact', icon: Icons.info, isActive: _currentIndex == 2, isDark: isDark, onTap: () { setState(() => _currentIndex = 2); Navigator.pop(context); })]))),
       body: _screens[_currentIndex],
     );
   }
