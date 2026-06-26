@@ -2,7 +2,7 @@ name: Build Galaxy Tunnel APK
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   workflow_dispatch:
 
 jobs:
@@ -10,19 +10,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.22.0'
           channel: 'stable'
-      
       - name: Get dependencies
         run: flutter pub get
-      
-      - name: Build APK
+      - name: Build APK 
         run: flutter build apk --release
-      
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
