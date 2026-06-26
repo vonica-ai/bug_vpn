@@ -4,84 +4,99 @@ import 'colors.dart';
 class AppTheme {
   AppTheme._();
 
-  static ThemeData get theme => ThemeData(
+  static ThemeData get darkTheme => ThemeData(
     useMaterial3: true,
     fontFamily: 'Inter',
-    scaffoldBackgroundColor: AppColors.background,
-    colorScheme: const ColorScheme.light(
-      primary: AppColors.primary,
-      onPrimary: Colors.white,
-      primaryContainer: AppColors.primaryContainer,
-      onPrimaryContainer: Color(0xFF21005D),
-      secondary: AppColors.secondary,
-      onSecondary: Colors.white,
-      secondaryContainer: AppColors.secondaryContainer,
-      onSecondaryContainer: Color(0xFF1D192B),
-      tertiary: AppColors.tertiary,
-      onTertiary: Colors.white,
-      tertiaryContainer: AppColors.tertiaryContainer,
-      onTertiaryContainer: Color(0xFF370031),
-      surface: AppColors.surface,
-      onSurface: AppColors.onSurface,
-      surfaceVariant: Color(0xFFE7E0EC),
-      onSurfaceVariant: Color(0xFF49454F),
-      outline: AppColors.outline,
-      error: AppColors.red,
-      onError: Colors.white,
-      brightness: Brightness.light,
+    brightness: Brightness.dark,
+    scaffoldBackgroundColor: AppColors.darkBackground,
+    colorScheme: const ColorScheme.dark(
+      primary: AppColors.darkTextPrimary,
+      secondary: AppColors.cyanAccent,
+      surface: AppColors.darkCard,
+      onSurface: AppColors.darkTextPrimary,
+      outline: AppColors.darkBorder,
     ),
     cardTheme: CardTheme(
       elevation: 0,
-      margin: const EdgeInsets.all(0),
-      color: Colors.white,
+      color: AppColors.darkCard,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        side: BorderSide(
-          width: 1,
-          color: AppColors.outline.withOpacity(0.3),
-        ),
+        side: const BorderSide(color: AppColors.darkBorder, width: 1),
       ),
     ),
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
         minimumSize: const Size(128, 48),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-      ),
-    ),
-    elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        elevation: 0,
-        padding: const EdgeInsets.symmetric(horizontal: 24),
-        minimumSize: const Size(128, 48),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: AppColors.surface,
+      fillColor: AppColors.darkCard,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(color: AppColors.outline.withOpacity(0.3)),
+        borderSide: const BorderSide(color: AppColors.darkBorder),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(color: AppColors.outline.withOpacity(0.3)),
+        borderSide: const BorderSide(color: AppColors.darkBorder),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: AppColors.primary, width: 2),
+        borderSide: const BorderSide(color: AppColors.cyanAccent, width: 2),
       ),
     ),
-    pageTransitionsTheme: const PageTransitionsTheme(
-      builders: {
-        TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
-        TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-      },
+    dividerTheme: const DividerThemeData(
+      color: AppColors.darkBorder,
+    ),
+  );
+
+  static ThemeData get lightTheme => ThemeData(
+    useMaterial3: true,
+    fontFamily: 'Inter',
+    brightness: Brightness.light,
+    scaffoldBackgroundColor: AppColors.lightBackground,
+    colorScheme: const ColorScheme.light(
+      primary: AppColors.lightTextPrimary,
+      secondary: AppColors.cyanAccent,
+      surface: AppColors.lightCard,
+      onSurface: AppColors.lightTextPrimary,
+      outline: AppColors.lightBorder,
+    ),
+    cardTheme: CardTheme(
+      elevation: 0,
+      color: AppColors.lightCard,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: const BorderSide(color: AppColors.lightBorder, width: 1),
+      ),
+    ),
+    filledButtonTheme: FilledButtonThemeData(
+      style: FilledButton.styleFrom(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        minimumSize: const Size(128, 48),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      ),
+    ),
+    inputDecorationTheme: InputDecorationTheme(
+      filled: true,
+      fillColor: AppColors.lightCard,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(color: AppColors.lightBorder),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(color: AppColors.lightBorder),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(color: AppColors.cyanAccent, width: 2),
+      ),
+    ),
+    dividerTheme: const DividerThemeData(
+      color: AppColors.lightBorder,
     ),
   );
 }
