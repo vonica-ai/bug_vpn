@@ -6,7 +6,6 @@ import 'package:toastification/toastification.dart';
 
 import 'app/shared/preferences/preferences.dart';
 import 'app/shared/routes/routes.dart';
-import 'app/shared/theme/colors.dart';
 import 'app/shared/theme/theme.dart';
 import 'app/shared/utils/utils.dart';
 import 'app/ui/configs/view/providers/configs_provider.dart';
@@ -39,7 +38,7 @@ class App extends StatelessWidget {
         animationDuration: const Duration(milliseconds: 200),
         animationBuilder: (context, animation, alignment, child) {
           return ScaleTransition(
-            scale: Tween<double>(begin: 0.5, end: 1).animate(animation),
+            scale: Tween(begin: 0.5, end: 1).animate(animation),
             child: FadeTransition(opacity: animation, child: child),
           );
         },
@@ -58,7 +57,7 @@ class App extends StatelessWidget {
                   backgroundColor: Colors.black12,
                   strokeAlign: BorderSide.strokeAlignOutside,
                   strokeCap: StrokeCap.round,
-                  color: AppColors.green,
+                  color: AppColors.primary,
                 ),
               ),
             ),
