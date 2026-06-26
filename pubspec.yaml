@@ -1,5 +1,5 @@
-name: bug_vpn
-description: "V2Ray client with free configs, developed with flutter."
+name: galaxy_tunnel
+description: "Galaxy Tunnel - V2Ray VPN Client"
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -9,36 +9,25 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  
-  # ui and utilities
   uicons:
-  toastification: 
+  toastification:
   loader_overlay:
   flutter_animate:
-  # preferences
   shared_preferences:
-  # network
   http:
-  # state
   flutter_riverpod:
-  # vpn
   flutter_v2ray_client:
- 
-  
-dev_dependencies:
 
+dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^4.0.0
   icons_launcher:
 
-
 flutter:
   uses-material-design: true
-
   assets:
     - images/
-
   fonts:
     - family: Inter
       fonts:
