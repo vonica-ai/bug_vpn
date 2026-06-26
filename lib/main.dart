@@ -3,12 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:toastification/toastification.dart';
-
-import 'app/shared/preferences/preferences.dart';
-import 'app/shared/routes/routes.dart';
 import 'app/shared/theme/theme.dart';
+import 'app/shared/theme/app_theme_provider.dart';
 import 'app/shared/utils/utils.dart';
-import 'app/ui/configs/view/providers/configs_provider.dart';
+import 'app/ui/main_shell.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,29 +14,23 @@ void main() async {
     DeviceOrientation.portraitDown,
     DeviceOrientation.portraitUp,
   ]);
-  await Preferences.instance.init();
-  runApp(
-    ProviderScope(
-      overrides: [
-        selectedConfigProvider.overrideWithBuild((ref, _) => Preferences.instance.getConfig()),
-      ],
-      child: const App(),
-    ),
-  );
+  runApp(const ProviderScope(child: App()));
 }
 
-class App extends StatelessWidget {
+class App extends ConsumerWidget {
   const App({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final themeMode = ref.watch(themeModeProvider);
+
     return ToastificationWrapper(
       config: ToastificationConfig(
         alignment: Alignment.center,
         animationDuration: const Duration(milliseconds: 200),
         animationBuilder: (context, animation, alignment, child) {
           return ScaleTransition(
-            scale: Tween(begin: 0.5, end: 1).animate(animation),
+            scale: Tween(begin: 0.5, end: 1.0).animate(animation),
             child: FadeTransition(opacity: animation, child: child),
           );
         },
@@ -57,7 +49,7 @@ class App extends StatelessWidget {
                   backgroundColor: Colors.black12,
                   strokeAlign: BorderSide.strokeAlignOutside,
                   strokeCap: StrokeCap.round,
-                  color: AppColors.primary,
+                  color: AppColors.cyanAccent,
                 ),
               ),
             ),
@@ -66,10 +58,10 @@ class App extends StatelessWidget {
         child: MaterialApp(
           title: AppUtils.appLabel,
           debugShowCheckedModeBanner: false,
-          theme: AppTheme.theme,
-          initialRoute: AppRoutes.splashRoute,
-          routes: AppRoutes.routes,
-          scrollBehavior: const MaterialScrollBehavior().copyWith(overscroll: false),
+          theme: AppTheme.darkTheme,
+          darkTheme: AppTheme.darkTheme,
+          themeMode: themeMode,
+          home: const MainShell(),
         ),
       ),
     );
