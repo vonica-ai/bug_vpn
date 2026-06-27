@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../shared/theme/colors.dart';
 import '../shared/providers/vpn_provider.dart';
-import '../shared/theme/app_theme_provider.dart';
 import 'home/home_screen.dart';
 import 'settings/settings_screen.dart';
 import 'contact/contact_screen.dart';
@@ -26,10 +25,81 @@ class _MainShellState extends ConsumerState<MainShell> {
     final bgColor = isDark ? AppColors.darkBackground : AppColors.lightBackground;
     final borderColor = isDark ? AppColors.darkBorder : AppColors.lightBorder;
     final language = ref.watch(languageProvider);
+
     return Scaffold(
       backgroundColor: bgColor,
-      appBar: AppBar(backgroundColor: bgColor, surfaceTintColor: Colors.transparent, title: GalaxyTunnelBrandText(fontSize: 16, isDark: isDark), actions: [Row(children: [LanguageButton(label: 'MY', isActive: language == 'my', isDark: isDark, onTap: () => ref.read(languageProvider.notifier).state = 'my'), const SizedBox(width: 4), LanguageButton(label: 'EN', isActive: language == 'en', isDark: isDark, onTap: () => ref.read(languageProvider.notifier).state = 'en'), const SizedBox(width: 8)])]), bottom: PreferredSize(preferredSize: const Size.fromHeight(1), child: Divider(color: borderColor, height: 1))),
-      drawer: Drawer(backgroundColor: isDark ? AppColors.darkCard : AppColors.lightCard, child: SafeArea(child: Column(children: [Padding(padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20), child: GalaxyTunnelBrandText(fontSize: 18, isDark: isDark)), Divider(color: borderColor, height: 1), const SizedBox(height: 12), DrawerItem(label: 'Servers', icon: Icons.dns, isActive: _currentIndex == 0, isDark: isDark, onTap: () { setState(() => _currentIndex = 0); Navigator.pop(context); }), DrawerItem(label: 'Settings', icon: Icons.settings, isActive: _currentIndex == 1, isDark: isDark, onTap: () { setState(() => _currentIndex = 1); Navigator.pop(context); }), DrawerItem(label: 'Contact', icon: Icons.info, isActive: _currentIndex == 2, isDark: isDark, onTap: () { setState(() => _currentIndex = 2); Navigator.pop(context); })]))),
+      appBar: AppBar(
+        backgroundColor: bgColor,
+        surfaceTintColor: Colors.transparent,
+        title: GalaxyTunnelBrandText(fontSize: 16, isDark: isDark),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: Row(
+              children: [
+                LanguageButton(
+                  label: 'MY',
+                  isActive: language == 'my',
+                  isDark: isDark,
+                  onTap: () => ref.read(languageProvider.notifier).state = 'my',
+                ),
+                const SizedBox(width: 4),
+                LanguageButton(
+                  label: 'EN',
+                  isActive: language == 'en',
+                  isDark: isDark,
+                  onTap: () => ref.read(languageProvider.notifier).state = 'en',
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+      drawer: Drawer(
+        backgroundColor: isDark ? AppColors.darkCard : AppColors.lightCard,
+        child: SafeArea(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
+                child: GalaxyTunnelBrandText(fontSize: 18, isDark: isDark),
+              ),
+              Divider(color: borderColor, height: 1),
+              const SizedBox(height: 12),
+              DrawerItem(
+                label: 'Servers',
+                icon: Icons.dns,
+                isActive: _currentIndex == 0,
+                isDark: isDark,
+                onTap: () {
+                  setState(() => _currentIndex = 0);
+                  Navigator.pop(context);
+                },
+              ),
+              DrawerItem(
+                label: 'Settings',
+                icon: Icons.settings,
+                isActive: _currentIndex == 1,
+                isDark: isDark,
+                onTap: () {
+                  setState(() => _currentIndex = 1);
+                  Navigator.pop(context);
+                },
+              ),
+              DrawerItem(
+                label: 'Contact',
+                icon: Icons.info,
+                isActive: _currentIndex == 2,
+                isDark: isDark,
+                onTap: () {
+                  setState(() => _currentIndex = 2);
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
       body: _screens[_currentIndex],
     );
   }
