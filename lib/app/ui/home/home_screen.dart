@@ -1,3 +1,4 @@
+import '../../shared/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../shared/theme/colors.dart';
@@ -33,7 +34,7 @@ class HomeScreen extends ConsumerWidget {
             GalaxyTunnelBrandText(fontSize: 24, isDark: isDark),
             const SizedBox(height: 4),
             Text('Secure VPN Connection', style: TextStyle(fontSize: 12, color: textSecondary)),
-          ])),
+          ]),
           const SizedBox(height: 20),
 
           // Engine Control Card
